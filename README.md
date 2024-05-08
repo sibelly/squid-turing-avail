@@ -1,7 +1,7 @@
-# Squid template project
+# Squid turing avail project
 
 A starter [Squid](https://subsquid.io) project to demonstrate its structure and conventions.
-It accumulates [avail](https://www.availproject.org/developer) account transfers and serves them via GraphQL API.
+It accumulates [turing-avail](https://www.availproject.org/developer) account transfers and serves them via GraphQL API.
 
 ## Summary
 

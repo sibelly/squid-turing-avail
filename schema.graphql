@@ -3,6 +3,7 @@ type Account @entity {
   id: ID!
   transfersTo: [Transfer!] @derivedFrom(field: "to")
   transfersFrom: [Transfer!] @derivedFrom(field: "from")
+  block: Block!
 }
 
 type Transfer @entity {
@@ -14,4 +15,22 @@ type Transfer @entity {
   to: Account!
   amount: BigInt! @index
   fee: BigInt! # fee is calculated at the best effort and may be zero for some old extrinsics
+}
+
+type NominationPool @entity {
+  id: ID!
+}
+
+type Block @entity @index(fields: ["height", "id"], unique: true) @index(fields: ["height", "finalized"], unique: true) {
+  id: ID!
+  height: Int! @index @unique
+  hash: String! @index @unique
+  author: String!
+  stateRoot: String!
+  parentHash: String!
+  extrinsicRoot: String!
+  finalized: Boolean! @index
+  timestamp: DateTime!
+  processorTimestamp: DateTime
+  accounts: [Account!] @derivedFrom(field: "block")
 }

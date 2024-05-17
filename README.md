@@ -43,36 +43,18 @@ sqd run .
 ```
 A GraphiQL playground will be available at [localhost:4350/graphql](http://localhost:4350/graphql).
 
-## Public archives for Parachains
+## Import your own netadata
+```
+npx substrate-metadata-explorer --rpc https://turing-rpc.avail.so/rpc --out avail-metadata.jsonl
 
-Subsquid provides archive data sources [for most parachains](https://docs.subsquid.io/substrate-indexing/supported-networks/). Use `lookupArchive(<network name>, <lookup filters>)` from `@subsquid/archive-registry` to look up the archive endpoint by the network name, e.g.
-
-```typescript
-processor.setDataSource({
-  archive: lookupArchive("kusama", { release: "ArrowSquid" })
-  //...
-});
 ```
 
-To make sure you're indexing the right chain one can additionally filter by the genesis block hash:
+## Instalar o Rust para decodificar o metadata
 
-```typescript
-processor.setDataSource({
-  archive: lookupArchive("kusama", { 
-    release: "ArrowSquid",
-    genesis: "0xb0a8d493285c2df73290dfb7e61f870f17b41801197a149ca93654499ea3dafe" 
-  }),
-  //...
-});
+```bash
+cargo install subxt-cli
+subxt metadata --url https://turing-rpc.avail.so/rpc -f json -o metadata.json
 ```
-
-If the chain is not yet supported, you can still index it using [RPC ingestion](https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source). If you take this route, use [metadata exporer](https://github.com/subsquid/squid-sdk/tree/master/substrate/substrate-metadata-explorer) with [Substrate typegen](https://docs.subsquid.io/substrate-indexing/squid-substrate-typegen/) for help with decoding.
-
-You can also fill out this [form](https://forms.gle/Vhr3exPs4HrF4Zt36) to submit a request for an Archive/Subsquid Network dataset.
-
-## Self-hosted archive
-
-Self-hosted Archives are deprecated by the ArrowSquid release. Keep an eye on updates on [Subsquid Network](https://docs.subsquid.io/subsquid-network/) and use it instead once it is released.
 
 ## Dev flow
 
@@ -88,6 +70,9 @@ Mapping developers use [TypeORM](https://typeorm.io) entities
 to interact with the target database during data processing. All necessary entity classes are
 [generated](https://docs.subsquid.io/store/postgres/schema-file/intro/) by the squid framework from `schema.graphql`. This is done by running `npx squid-typeorm-codegen`
 or (equivalently) `sqd codegen` command.
+
+```npx squid-typeorm-codegen -> Generates TypeORM entity classes from squid GraphQL schema
+```
 
 ### 3. Generate database migration
 

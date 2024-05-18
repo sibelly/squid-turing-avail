@@ -1,4 +1,4 @@
-import { Store } from '@subsquid/typeorm-store'
+import {TypeormDatabase, Store} from '@subsquid/typeorm-store'
 import {In} from 'typeorm'
 import * as ss58 from '@subsquid/ss58'
 import assert from 'assert'

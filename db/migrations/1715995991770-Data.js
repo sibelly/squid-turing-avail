@@ -1,5 +1,5 @@
-module.exports = class Data1715988346902 {
-    name = 'Data1715988346902'
+module.exports = class Data1715995991770 {
+    name = 'Data1715995991770'
 
     async up(db) {
         await db.query(`CREATE TABLE "transfer" ("id" character varying NOT NULL, "block_number" integer NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "extrinsic_hash" text, "amount" numeric NOT NULL, "fee" numeric NOT NULL, "from_id" character varying, "to_id" character varying, CONSTRAINT "PK_fd9ddbdd49a17afcbe014401295" PRIMARY KEY ("id"))`)
@@ -15,13 +15,9 @@ module.exports = class Data1715988346902 {
         await db.query(`CREATE INDEX "IDX_97862dcc0742e14c96127c78b1" ON "block" ("finalized") `)
         await db.query(`CREATE UNIQUE INDEX "IDX_38b7c6782957e94a618be835ec" ON "block" ("height", "finalized") `)
         await db.query(`CREATE UNIQUE INDEX "IDX_686a6a7b1f98ed462e769a5fde" ON "block" ("height", "id") `)
-        await db.query(`CREATE TABLE "nomination_pool" ("id" character varying NOT NULL, CONSTRAINT "PK_eca87fa483dc7c8e44d3d884b5b" PRIMARY KEY ("id"))`)
-        await db.query(`ALTER TABLE "account" DROP COLUMN "free"`)
-        await db.query(`ALTER TABLE "account" DROP COLUMN "reserved"`)
-        await db.query(`ALTER TABLE "account" DROP COLUMN "total"`)
-        await db.query(`ALTER TABLE "account" DROP COLUMN "updated_at_block"`)
-        await db.query(`ALTER TABLE "account" ADD "block_id" character varying`)
+        await db.query(`CREATE TABLE "account" ("id" character varying NOT NULL, "block_id" character varying, CONSTRAINT "PK_54115ee388cdb6d86bb4bf5b2ea" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_d9c630ee6c2f1bcc56e46bab5a" ON "account" ("block_id") `)
+        await db.query(`CREATE TABLE "nomination_pool" ("id" character varying NOT NULL, CONSTRAINT "PK_eca87fa483dc7c8e44d3d884b5b" PRIMARY KEY ("id"))`)
         await db.query(`ALTER TABLE "transfer" ADD CONSTRAINT "FK_76bdfed1a7eb27c6d8ecbb73496" FOREIGN KEY ("from_id") REFERENCES "account"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "transfer" ADD CONSTRAINT "FK_0751309c66e97eac9ef11493623" FOREIGN KEY ("to_id") REFERENCES "account"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "account" ADD CONSTRAINT "FK_d9c630ee6c2f1bcc56e46bab5a8" FOREIGN KEY ("block_id") REFERENCES "block"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
@@ -41,13 +37,9 @@ module.exports = class Data1715988346902 {
         await db.query(`DROP INDEX "public"."IDX_97862dcc0742e14c96127c78b1"`)
         await db.query(`DROP INDEX "public"."IDX_38b7c6782957e94a618be835ec"`)
         await db.query(`DROP INDEX "public"."IDX_686a6a7b1f98ed462e769a5fde"`)
-        await db.query(`DROP TABLE "nomination_pool"`)
-        await db.query(`ALTER TABLE "account" ADD "free" numeric NOT NULL`)
-        await db.query(`ALTER TABLE "account" ADD "reserved" numeric NOT NULL`)
-        await db.query(`ALTER TABLE "account" ADD "total" numeric NOT NULL`)
-        await db.query(`ALTER TABLE "account" ADD "updated_at_block" integer NOT NULL`)
-        await db.query(`ALTER TABLE "account" DROP COLUMN "block_id"`)
+        await db.query(`DROP TABLE "account"`)
         await db.query(`DROP INDEX "public"."IDX_d9c630ee6c2f1bcc56e46bab5a"`)
+        await db.query(`DROP TABLE "nomination_pool"`)
         await db.query(`ALTER TABLE "transfer" DROP CONSTRAINT "FK_76bdfed1a7eb27c6d8ecbb73496"`)
         await db.query(`ALTER TABLE "transfer" DROP CONSTRAINT "FK_0751309c66e97eac9ef11493623"`)
         await db.query(`ALTER TABLE "account" DROP CONSTRAINT "FK_d9c630ee6c2f1bcc56e46bab5a8"`)

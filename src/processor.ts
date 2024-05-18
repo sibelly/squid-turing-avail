@@ -1,9 +1,9 @@
 import {assertNotNull} from '@subsquid/util-internal'
+import {TypeormDatabase} from '@subsquid/typeorm-store'
 import {
     BlockHeader,
     DataHandlerContext,
     SubstrateBatchProcessor,
-    SubstrateBatchProcessorFields,
     Event as _Event,
     Call as _Call,
     Extrinsic as _Extrinsic
@@ -11,38 +11,43 @@ import {
 
 import {events} from './types'
 
+const fields = {
+    event: {
+      phase: true,
+    },
+    extrinsic: {
+      signature: true,
+      success: true,
+      error: true,
+      hash: true,
+      version: true,
+    },
+    call: {
+      name: true,
+      args: true,
+    },
+    block: {
+      timestamp: true,
+      stateRoot: true,
+      extrinsicsRoot: true,
+      validator: true,
+    }
+  };
+export type Fields = typeof fields;
+export const database = new TypeormDatabase({supportHotBlocks: true});
+
 export const processor = new SubstrateBatchProcessor()
-    // Lookup archive by the network name in Subsquid registry
-    // See https://docs.subsquid.io/substrate-indexing/supported-networks/
     .setGateway('https://v2.archive.subsquid.io/network/turing-avail')
-    // Chain RPC endpoint is required on Substrate for metadata and real-time updates
     .setRpcEndpoint({
-        // Set via .env for local runs or via secrets when deploying to Subsquid Cloud
-        // https://docs.subsquid.io/deploy-squid/env-variables/
         url: assertNotNull(process.env.RPC_ENDPOINT),
-        // More RPC connection options at https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source
         rateLimit: 10
     })
     .addEvent({
         name: [events.balances.transfer.name],
         extrinsic: true
     })
-    .setFields({
-        event: {
-            args: true
-        },
-        extrinsic: {
-            hash: true,
-            fee: true
-        },
-        block: {
-            timestamp: true
-        }
-    })
-    // Uncomment to disable RPC ingestion and drastically reduce no of RPC calls
-    //.useArchiveOnly()
+    .setFields(fields)
 
-export type Fields = SubstrateBatchProcessorFields<typeof processor>
 export type Block = BlockHeader<Fields>
 export type Event = _Event<Fields>
 export type Call = _Call<Fields>

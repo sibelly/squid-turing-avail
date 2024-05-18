@@ -1,14 +1,33 @@
 {
   "outDir": "src/types",
-  "specVersions": "https://v2.archive.subsquid.io/metadata/turing-avail",
+  "specVersions": "./avail-metadata.jsonl",
   "pallets": {
     "Balances": {
-      "events": [
-        "Transfer"
-      ],
-      "calls": [],
-      "storage": [],
-      "constants": []
+      "constants": true,
+      "calls": true,
+      "events": true,
+      "storage": true
+    },
+    "NominationPools": {
+      "constants": true,
+      "calls": true,
+      "events": true,
+      "storage": true
+    },
+    "VoterList": {
+      "constants": true,
+      "calls": true,
+      "events": true,
+      "storage": true
+    },
+    "Staking":{
+      "constants": true,
+      "calls": true,
+      "events": true,
+      "storage": true
+    },
+    "System": {
+      "storage": true
     }
   }
 }
